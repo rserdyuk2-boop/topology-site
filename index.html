@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetTopology — ІС топологій локальних мереж</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--ink:#17243a;--muted:#68778e;--line:#e1e8f0;--blue:#2864dc;--blue2:#eaf1ff;--green:#16845b;--orange:#b86a13;--red:#c34b54;--shadow:0 8px 28px #243b5b0c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:white;font-weight:650}button.secondary{background:#eef2f8;color:#34445d}button.outline{background:white;color:var(--blue);border:1px solid #cbd9f5}button:disabled{opacity:.45;cursor:not-allowed}
+header{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,54px);position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#3979f6,#1744a8);display:grid;place-items:center;color:white;font-size:20px}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.3px}.status{font-size:12px;color:var(--green);background:#eaf8f1;padding:6px 10px;border-radius:20px}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:calc(100vh - 70px)}aside{padding:24px 14px;border-right:1px solid var(--line);background:#fbfcfe}.nav-label{font-size:11px;color:#98a4b5;font-weight:800;letter-spacing:1px;padding:8px 12px}.nav{width:100%;text-align:left;background:transparent;color:#52627a;padding:11px 12px;margin:2px 0;font-weight:600;border-radius:9px}.nav.active,.nav:hover{background:var(--blue2);color:var(--blue)}.nav span{display:inline-block;width:25px}.aside-note{margin:28px 7px 0;padding:13px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px}
+main{padding:30px clamp(16px,3vw,42px);max-width:1500px;width:100%;margin:auto}.page{display:none}.page.active{display:block}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.heading h1{font-size:27px;margin:4px 0 5px;letter-spacing:-.5px}.sub{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:19px;box-shadow:var(--shadow);min-width:0}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:span 12}.metric{display:flex;align-items:center;justify-content:space-between}.metric strong{font-size:28px;display:block;line-height:1.2}.metric small{color:var(--muted)}.metric-icon{width:42px;height:42px;border-radius:12px;background:var(--blue2);color:var(--blue);display:grid;place-items:center;font-size:20px}.card h2,.card h3{margin:0 0 13px}.card h2{font-size:17px}.card h3{font-size:15px}.topology-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.topology-option{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;background:white;color:var(--ink)}.topology-option.selected{border:2px solid var(--blue);background:#f5f8ff;padding:11px}.topology-option b{display:block}.topology-option small{color:var(--muted)}.tag{font-size:11px;border-radius:20px;padding:4px 8px;background:#eef3fa;color:#53647d;display:inline-block}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.canvas-wrap{height:390px;border:1px dashed #cbd6e4;border-radius:12px;background-color:#fbfdff;background-image:radial-gradient(#dbe4f0 1px,transparent 1px);background-size:19px 19px;overflow:hidden;position:relative}.canvas-wrap svg{width:100%;height:100%;display:block}.node rect{fill:#fff;stroke:#6d91d9;stroke-width:2;rx:10}.node text{font-size:12px;fill:#243750;text-anchor:middle}.edge{stroke:#91a6c5;stroke-width:2.5;fill:none}.edge-label{font-size:10px;fill:#72839a}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;background:#6d91d9}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select{border:1px solid var(--line);border-radius:9px;padding:10px;background:white;color:var(--ink);width:100%}.result{font-size:25px;font-weight:800;color:var(--blue)}.muted{color:var(--muted)}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:top}.table th{color:#74839a;font-size:11px;text-transform:uppercase;letter-spacing:.5px}.good{color:var(--green);font-weight:700}.warn{color:var(--orange);font-weight:700}.info-box{background:#f1f6ff;border:1px solid #dbe7ff;padding:13px;border-radius:11px;color:#435a7e;font-size:13px}.device-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.device-pill{padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:white;color:#42536c;font-size:12px}.device-pill b{color:var(--blue)}.footer{color:#9aa6b6;text-align:center;font-size:11px;padding:25px 0 8px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{display:flex;gap:5px;overflow:auto;padding:8px;border-right:0;border-bottom:1px solid var(--line)}.nav-label,.aside-note{display:none}.nav{white-space:nowrap;width:auto;padding:9px 12px}.span-3,.span-4,.span-5,.span-6,.span-7,.span-8{grid-column:span 12}.heading{flex-direction:column}.canvas-wrap{height:320px}}
+
+@media print{
+ header,aside,.heading button,.footer{display:none!important}
+ .layout{display:block}main{max-width:none;padding:0}
+ .page{display:none!important}#course{display:block!important}
+ #course .card{box-shadow:none;break-inside:avoid;border:0;padding:8px 0}
+ #course h2{break-after:avoid}#course h3{break-after:avoid}
+ #course a{color:inherit;text-decoration:none}
+ body{background:white;font-size:12pt;color:#111}
+}
+
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">⌘</div><div>NetTopology<small>ІНФОРМАЦІЙНА СИСТЕМА ЛОКАЛЬНИХ МЕРЕЖ</small></div></div><div class="status">● Система готова до роботи</div></header>
+<div class="layout">
+<aside>
+<div class="nav-label">РОБОЧА ОБЛАСТЬ</div>
+<button class="nav active" data-page="dashboard"><span>▦</span>Огляд системи</button>
+<button class="nav" data-page="builder"><span>⌘</span>Конструктор мережі</button>
+<button class="nav" data-page="compare"><span>⇄</span>Порівняння топологій</button>
+<button class="nav" data-page="calculator"><span>▤</span>Калькулятор вартості</button>
+<button class="nav" data-page="guide"><span>◉</span>Довідник</button>
+<button class="nav" data-page="course"><span>▤</span>Матеріали курсового</button>
+<div class="aside-note">Навчальний програмний продукт для дослідження структури та базових характеристик локальних комп’ютерних мереж.</div>
+</aside>
+<main>
+<section class="page active" id="dashboard">
+<div class="heading"><div><div class="eyebrow">Головна панель</div><h1>Огляд системи</h1><p class="sub">Інструменти для проєктування та аналізу локальних мереж.</p></div><button onclick="showPage('builder')">Відкрити конструктор →</button></div>
+<div class="grid">
+<div class="card span-3"><div class="metric"><div><strong>5</strong><small>Базових топологій</small></div><div class="metric-icon">⌘</div></div></div>
+<div class="card span-3"><div class="metric"><div><strong id="deviceMetric">6</strong><small>Вузлів у прикладі</small></div><div class="metric-icon">▣</div></div></div>
+<div class="card span-3"><div class="metric"><div><strong>3</strong><small>Основні модулі</small></div><div class="metric-icon">▤</div></div></div>
+<div class="card span-3"><div class="metric"><div><strong>100%</strong><small>Локальна робота</small></div><div class="metric-icon">✓</div></div></div>
+<div class="card span-7"><h2>Можливості системи</h2><table class="table"><tr><td>Візуалізація топологій</td><td class="good">Доступно</td></tr><tr><td>Порівняння характеристик</td><td class="good">Доступно</td></tr><tr><td>Розрахунок орієнтовної вартості</td><td class="good">Доступно</td></tr><tr><td>Формування власної схеми</td><td class="good">Доступно</td></tr></table></div>
+<div class="card span-5"><h2>Як почати роботу</h2><ol class="muted"><li>Оберіть потрібну топологію.</li><li>Перегляньте її графічну схему.</li><li>Задайте кількість робочих станцій.</li><li>Порівняйте варіанти та оцініть витрати.</li></ol><div class="info-box">Усі розрахунки мають навчальний характер. Фактична вартість залежить від виробника, моделі та ринкових цін.</div></div>
+</div></section>
+<section class="page" id="builder">
+<div class="heading"><div><div class="eyebrow">Проєктування</div><h1>Конструктор локальної мережі</h1><p class="sub">Оберіть тип з’єднання та параметри для побудови схеми.</p></div><button class="secondary" onclick="resetBuilder()">Скинути параметри</button></div>
+<div class="grid">
+<div class="card span-4"><h2>Параметри мережі</h2>
+<div class="field"><label>Топологія</label><select id="topology" onchange="renderNetwork()"><option value="star">Зірка</option><option value="bus">Шина</option><option value="ring">Кільце</option><option value="tree">Дерево</option><option value="mesh">Комірчаста</option></select></div>
+<div class="field"><label>Кількість комп’ютерів (2–12)</label><input id="pcs" type="number" min="2" max="12" value="5" onchange="renderNetwork()"></div>
+<div class="field"><label>Швидкість каналу, Мбіт/с</label><select id="speed"><option>100</option><option selected>1000</option><option>2500</option><option>10000</option></select></div>
+<div class="field"><label>Примітка до проєкту</label><input id="projectName" value="Навчальна локальна мережа"></div>
+<button onclick="renderNetwork()">Побудувати схему</button>
+<div class="device-row"><span class="device-pill"><b>▣</b> ПК</span><span class="device-pill"><b>◇</b> Комутатор</span><span class="device-pill"><b>◎</b> Маршрутизатор</span></div>
+</div>
+<div class="card span-8"><div class="toolbar" style="justify-content:space-between;margin-bottom:12px"><h2 style="margin:0">Візуальна схема</h2><span class="tag" id="schemeTag">Топологія: Зірка</span></div><div class="canvas-wrap"><svg id="networkSvg" viewBox="0 0 800 390" role="img" aria-label="Схема локальної мережі"></svg></div><div class="legend"><span><i></i>Мережевий вузол</span><span>— Лінія зв’язку</span><span id="nodeCount">Вузлів: 6</span></div><p class="muted" id="schemeDescription" style="font-size:13px;margin-bottom:0">Усі комп’ютери підключені до центрального комутатора.</p></div>
+<div class="card span-12"><h2>Підсумок конфігурації</h2><div class="grid"><div class="span-4"><small class="muted">Тип топології</small><div id="summaryType"><b>Зірка</b></div></div><div class="span-4"><small class="muted">Кількість комп’ютерів</small><div id="summaryPcs"><b>5</b></div></div><div class="span-4"><small class="muted">Пропускна здатність каналу</small><div id="summarySpeed"><b>1000 Мбіт/с</b></div></div></div></div>
+</div></section>
+<section class="page" id="compare">
+<div class="heading"><div><div class="eyebrow">Аналітичний модуль</div><h1>Порівняння топологій</h1><p class="sub">Порівняйте типові властивості різних структур локальної мережі.</p></div></div>
+<div class="card"><table class="table"><thead><tr><th>Топологія</th><th>Переваги</th><th>Недоліки</th><th>Складність</th><th>Стійкість</th></tr></thead><tbody>
+<tr><td><b>Зірка</b></td><td>Просте адміністрування; легко додавати вузли.</td><td>Залежність від центрального пристрою; більше кабелю.</td><td>Низька</td><td>Середня</td></tr>
+<tr><td><b>Шина</b></td><td>Проста структура; невелика витрата кабелю.</td><td>Спільний канал; складніше знаходити несправності.</td><td>Низька</td><td>Низька</td></tr>
+<tr><td><b>Кільце</b></td><td>Упорядкована передача даних між вузлами.</td><td>Пошкодження лінії може порушити роботу кільця.</td><td>Середня</td><td>Низька/середня</td></tr>
+<tr><td><b>Дерево</b></td><td>Ієрархічне розширення; зручне групування.</td><td>Залежність нижчих рівнів від вищих вузлів.</td><td>Середня</td><td>Середня</td></tr>
+<tr><td><b>Комірчаста</b></td><td>Наявність альтернативних маршрутів; висока відмовостійкість.</td><td>Більше з’єднань; складніше налаштування та вища вартість.</td><td>Висока</td><td>Висока</td></tr>
+</tbody></table><p class="muted" style="font-size:12px">Оцінки є узагальненими: фактичні властивості залежать від обладнання, протоколів і способу резервування.</p></div>
+<div class="grid" style="margin-top:16px"><div class="card span-6"><h2>Коли доцільно використовувати зірку?</h2><p class="muted">Для офісів, навчальних кабінетів і невеликих підприємств, де потрібне централізоване підключення пристроїв через комутатор.</p></div><div class="card span-6"><h2>Коли доцільна комірчаста структура?</h2><p class="muted">Для мереж, у яких важлива наявність альтернативних шляхів передавання даних і підвищена стійкість до відмов окремих каналів.</p></div></div>
+</section>
+<section class="page" id="calculator">
+<div class="heading"><div><div class="eyebrow">Планування бюджету</div><h1>Калькулятор вартості</h1><p class="sub">Орієнтовна оцінка комплекту обладнання для локальної мережі.</p></div></div>
+<div class="grid"><div class="card span-5"><h2>Вхідні параметри</h2>
+<div class="field"><label>Кількість комп’ютерів</label><input id="calcPcs" type="number" min="2" max="100" value="10" oninput="calculate()"></div>
+<div class="field"><label>Кількість портів комутатора</label><select id="ports" onchange="calculate()"><option value="8">8 портів</option><option value="16" selected>16 портів</option><option value="24">24 порти</option><option value="48">48 портів</option></select></div>
+<div class="field"><label>Ціна комутатора, грн</label><input id="switchPrice" type="number" min="0" value="1800" oninput="calculate()"></div>
+<div class="field"><label>Ціна кабелю за метр, грн</label><input id="cablePrice" type="number" min="0" value="18" oninput="calculate()"></div>
+<div class="field"><label>Середня довжина кабелю до ПК, м</label><input id="cableLength" type="number" min="1" value="15" oninput="calculate()"></div>
+<div class="field"><label>Ціна конектора, грн</label><input id="connectorPrice" type="number" min="0" value="8" oninput="calculate()"></div>
+</div><div class="card span-7"><h2>Результат розрахунку</h2><div class="muted">Орієнтовна загальна вартість</div><div class="result" id="totalCost">0 грн</div><table class="table"><tbody><tr><td>Комутатор</td><td id="switchCost">—</td></tr><tr><td>Кабель</td><td id="cableCost">—</td></tr><tr><td>Конектори (2 на ПК)</td><td id="connectorCost">—</td></tr><tr><td>Резерв 10%</td><td id="reserveCost">—</td></tr></tbody></table><div class="info-box" style="margin-top:15px">Модель враховує один комутатор, кабель до кожного робочого місця та два конектори на одне підключення. Не враховано вартість ПК, монтажу, шафи, патч-панелей та електроживлення.</div><button class="outline" style="margin-top:14px" onclick="window.print()">Друкувати розрахунок</button></div></div>
+</section>
+<section class="page" id="guide">
+<div class="heading"><div><div class="eyebrow">Теоретичні відомості</div><h1>Довідник топологій</h1><p class="sub">Короткий опис основних способів організації локальної мережі.</p></div></div>
+<div class="grid">
+<div class="card span-6"><h2>Топологія «Зірка»</h2><p class="muted">Усі робочі станції підключаються до центрального пристрою — зазвичай комутатора. Обмін даними між вузлами проходить через нього. Відмова одного кабелю зазвичай впливає лише на відповідний вузол.</p><span class="tag">Поширена в Ethernet LAN</span></div>
+<div class="card span-6"><h2>Топологія «Шина»</h2><p class="muted">Усі вузли використовують спільну магістральну лінію. Така структура має просту фізичну організацію, але несправність магістралі може вплинути на всю мережу.</p><span class="tag">Історичний варіант Ethernet</span></div>
+<div class="card span-6"><h2>Топологія «Кільце»</h2><p class="muted">Кожен вузол з’єднаний із двома сусідніми, утворюючи замкнений контур. Дані передаються від вузла до вузла відповідно до механізму конкретної технології.</p><span class="tag">Послідовна структура</span></div>
+<div class="card span-6"><h2>Топологія «Дерево»</h2><p class="muted">Ієрархічна структура, у якій вузли об’єднані у гілки та рівні. Підходить для мереж із кількома сегментами або поверхами будівлі.</p><span class="tag">Ієрархічна структура</span></div>
+<div class="card span-12"><h2>Комірчаста (Mesh) топологія</h2><p class="muted">Вузли мають кілька міжвузлових з’єднань. Повна комірчаста топологія передбачає пряме з’єднання кожної пари вузлів, а часткова — лише окремих пар. Альтернативні шляхи можуть підвищувати доступність мережі, але збільшують кількість з’єднань і складність адміністрування.</p><span class="tag">Резервування маршрутів</span></div>
+</div></section>
+
+<section class="page" id="course">
+<div class="heading"><div><div class="eyebrow">Пояснювальні матеріали</div><h1>Матеріали курсового проєкту</h1><p class="sub">Теоретична та проєктна частини інформаційної системи NetTopology.</p></div><button class="outline" onclick="window.print()">Друкувати матеріали</button></div>
+<div class="info-box" style="margin-bottom:16px">Матеріали підготовлено за структурою методичних рекомендацій. Текст описує поточну навчальну версію NetTopology. Перед остаточним поданням курсового проєкту потрібно доповнити його фактичними скриншотами, остаточним лістингом і результатами виконаних тестів.</div>
+<div class="card span-12" style="margin-bottom:16px">
+<h2>Зміст</h2>
+<ol class="muted">
+<li><a href="#course-intro">Вступ</a></li>
+<li><a href="#course-analysis">1. Аналіз варіантів розв’язку задачі</a>
+  <ol><li>1.1. Предметна галузь</li><li>1.2. Постановка задачі та вимоги</li><li>1.3. Аналіз альтернативних способів реалізації</li><li>1.4. Обґрунтування обраного рішення</li></ol>
+</li>
+<li><a href="#course-algorithm">2. Опис алгоритму розв’язку задачі</a>
+  <ol><li>2.1. Загальна структура алгоритму</li><li>2.2. Алгоритм побудови топології</li><li>2.3. Алгоритм розрахунку вартості</li><li>2.4. Блок-схема — що потрібно підготувати</li></ol>
+</li>
+<li><a href="#course-program">3. Лістинг розробленої програми</a>
+  <ol><li>3.1. Структура компонентів системи</li><li>3.2. Вхідні та вихідні дані</li><li>3.3. Основні програмні функції</li></ol>
+</li>
+<li><a href="#course-results">4. Результати роботи програми</a>
+  <ol><li>4.1. Порядок роботи користувача</li><li>4.2. Перевірка функцій</li><li>4.3. Очікувані результати тестування</li></ol>
+</li>
+<li><a href="#course-conclusion">Висновки</a></li>
+<li><a href="#course-sources">Список використаних джерел</a></li>
+</ol>
+<p class="muted" style="font-size:12px">Номери сторінок у цьому змісті потрібно проставити після остаточного оформлення пояснювальної записки у текстовому редакторі.</p>
+</div>
+
+<div class="card span-12" id="course-intro" style="margin-bottom:16px">
+<h2>Вступ</h2>
+<p>Локальні комп’ютерні мережі є важливою складовою інформаційної інфраструктури навчальних закладів, офісів, підприємств та інших організацій. Вони забезпечують обмін даними між комп’ютерами, спільне використання периферійного обладнання, доступ до серверів і мережевих ресурсів. Ефективність роботи локальної мережі значною мірою залежить від правильного вибору її топології, мережевого обладнання та способу з’єднання вузлів.</p>
+<p>Топологія мережі визначає фізичну або логічну структуру взаємозв’язків між пристроями. Від неї залежать складність монтажу, витрати кабелю, можливість розширення, зручність адміністрування та поведінка мережі у разі пошкодження окремих з’єднань. Тому під час проєктування необхідно порівнювати декілька можливих варіантів і враховувати призначення майбутньої мережі.</p>
+<p>Метою курсового проєкту є розробка інформаційної системи «NetTopology», призначеної для наочного дослідження та попереднього проєктування топологій локальних комп’ютерних мереж. Система дає змогу обирати тип топології, задавати кількість робочих станцій, переглядати графічну схему, порівнювати основні характеристики різних структур і виконувати орієнтовний розрахунок вартості обладнання та кабельної продукції.</p>
+<p>Для досягнення поставленої мети необхідно виконати такі завдання: дослідити основні топології локальних мереж; визначити функціональні вимоги до системи; обрати засоби реалізації; розробити алгоритми формування схем і розрахунків; створити зрозумілий інтерфейс користувача; перевірити роботу основних функцій на різних наборах вхідних даних.</p>
+<p>Програмний продукт реалізовано як вебзастосунок із використанням HTML, CSS та JavaScript. Такий підхід дає змогу поєднати структуру сторінок, оформлення інтерфейсу та програмну обробку даних без встановлення додаткового серверного програмного забезпечення. Для відображення схем використовується SVG, що забезпечує масштабоване графічне подання вузлів і з’єднань.</p>
+</div>
+
+<div class="card span-12" id="course-analysis" style="margin-bottom:16px">
+<h2>1. Аналіз варіантів розв’язку задачі</h2>
+<h3>1.1. Предметна галузь</h3>
+<p>Предметною галуззю проєкту є проєктування локальних комп’ютерних мереж (LAN). До основних елементів такої мережі належать кінцеві пристрої (персональні комп’ютери, принтери, сервери), комутаційне обладнання, маршрутизатори, мережеві адаптери та середовище передавання даних. У межах цього проєкту основна увага приділяється взаємному розташуванню вузлів і способам їх з’єднання.</p>
+<p>Найпоширенішими навчальними прикладами є топології «зірка», «шина», «кільце», «дерево» та «комірчаста». Кожна з них має власні особливості. Наприклад, у структурі «зірка» кінцеві пристрої підключаються до центрального комутатора, тоді як у кільцевій структурі кожен вузол має зв’язок із двома сусідніми. Комірчаста структура передбачає декілька шляхів між вузлами, що може підвищувати стійкість до відмов, але ускладнює побудову.</p>
+<h3>1.2. Постановка задачі та вимоги</h3>
+<p>Потрібно створити програмну систему, яка допомагає користувачеві отримати початкове уявлення про структуру локальної мережі та порівняти декілька варіантів її побудови. Вхідними даними є тип топології, кількість комп’ютерів, швидкість каналу та параметри кошторису. Вихідними даними є графічна схема, короткий опис структури, порівняльні характеристики та орієнтовна сума витрат.</p>
+<p>До функціональних вимог належать: вибір однієї з п’яти топологій; введення кількості робочих станцій у допустимих межах; формування графічної схеми; відображення кількості вузлів; порівняння переваг і недоліків; розрахунок вартості комутатора, кабелю, конекторів і резерву. До нефункціональних вимог належать простота використання, читабельність інтерфейсу, коректна робота в сучасному браузері та можливість локального запуску.</p>
+<h3>1.3. Аналіз альтернативних способів реалізації</h3>
+<table class="table"><thead><tr><th>Варіант</th><th>Переваги</th><th>Недоліки</th></tr></thead><tbody>
+<tr><td>Ручне креслення у графічному редакторі</td><td>Висока свобода оформлення; можна створити будь-яку схему.</td><td>Зміни виконуються вручну; немає автоматичного перерахунку параметрів.</td></tr>
+<tr><td>Електронна таблиця</td><td>Зручно виконувати числові розрахунки та порівнювати значення.</td><td>Незручно створювати інтерактивні графічні схеми мережі.</td></tr>
+<tr><td>Спеціалізоване програмне забезпечення</td><td>Може містити професійні інструменти моделювання та налаштування.</td><td>Може бути складним для початківців і надмірним для навчального завдання.</td></tr>
+<tr><td>Вебзастосунок NetTopology</td><td>Поєднує схеми, довідкові матеріали, порівняння та калькулятор в одному інтерфейсі; запускається у браузері.</td><td>Навчальна модель не замінює професійне проєктування та не перевіряє реальну конфігурацію обладнання.</td></tr>
+</tbody></table>
+<h3>1.4. Обґрунтування обраного рішення</h3>
+<p>Для реалізації обрано вебтехнології HTML, CSS і JavaScript. HTML формує структуру сторінок і елементів керування, CSS відповідає за зовнішній вигляд та адаптацію інтерфейсу, а JavaScript обробляє введені параметри, формує схеми та виконує розрахунки. SVG використовується для графічного відображення вузлів і каналів зв’язку.</p>
+<p>Такий варіант відповідає навчальній меті проєкту: демонструє взаємодію інтерфейсу, алгоритмів і графічного подання даних, не потребує окремої бази даних для поточного набору функцій та може бути запущений локально. Для подальшого розвитку систему можна доповнити збереженням проєктів, ручним переміщенням вузлів і розширеними параметрами обладнання.</p>
+</div>
+
+<div class="card span-12" id="course-algorithm" style="margin-bottom:16px">
+<h2>2. Опис алгоритму розв’язку задачі</h2>
+<h3>2.1. Загальна структура алгоритму</h3>
+<p>Роботу системи умовно поділено на декілька функціональних блоків: ініціалізація інтерфейсу; обробка навігації; отримання параметрів мережі; формування графічної схеми; відображення характеристик; розрахунок орієнтовної вартості. Після завантаження сторінки програма встановлює початкові значення, будує демонстраційну схему та виконує початковий розрахунок калькулятора.</p>
+<h3>2.2. Алгоритм побудови топології</h3>
+<ol class="muted"><li>Користувач відкриває конструктор мережі.</li><li>Обирає тип топології та вводить кількість комп’ютерів.</li><li>Програма перевіряє введене значення та обмежує його діапазоном від 2 до 12.</li><li>Залежно від типу топології формуються координати вузлів і список з’єднань між ними.</li><li>Для кожного з’єднання створюється графічна лінія SVG.</li><li>Для кожного вузла створюється графічний елемент із підписом.</li><li>Оновлюються опис топології, кількість вузлів і зведені параметри.</li></ol>
+<h3>2.3. Алгоритм розрахунку вартості</h3>
+<p>Калькулятор використовує кількість комп’ютерів, кількість портів комутатора, ціну комутатора, ціну одного метра кабелю, середню довжину кабелю до робочого місця та ціну конектора. Кількість комутаторів визначається округленням угору відношення кількості комп’ютерів до кількості портів.</p>
+<div class="info-box"><b>Формули розрахунку:</b><br>Кількість комутаторів = округлення вгору (кількість ПК / кількість портів).<br>Вартість комутаторів = кількість комутаторів × ціна комутатора.<br>Вартість кабелю = кількість ПК × довжина кабелю × ціна за метр.<br>Вартість конекторів = кількість ПК × 2 × ціна конектора.<br>Резерв = 10% від проміжної суми.<br><b>Загальна вартість = проміжна сума + резерв.</b></div>
+<h3>2.4. Блок-схема алгоритму</h3>
+<p>Відповідно до методичних рекомендацій графічна частина курсового проєкту повинна містити блок-схему алгоритму роботи програми. Для NetTopology її доцільно побудувати так: «Початок» → «Ініціалізація системи» → «Введення параметрів» → «Перевірка даних» → «Вибір топології» → «Формування вузлів і зв’язків» → «Відображення схеми» → «Розрахунок вартості (за потреби)» → «Виведення результату» → «Кінець». На розгалуженні перевірки даних потрібно передбачити повернення до введення параметрів у разі некоректного значення.</p>
+<div class="info-box">Блок-схему на аркуші А1 потрібно оформити окремо від пояснювальної записки, з рамкою та штампом. Наведений тут текст є описом послідовності, а не заміною креслення.</div>
+</div>
+
+<div class="card span-12" id="course-program" style="margin-bottom:16px">
+<h2>3. Лістинг розробленої програми</h2>
+<h3>3.1. Структура компонентів системи</h3>
+<p>Програмний продукт має клієнтську архітектуру та складається з одного HTML-документа, у якому розміщено розмітку сторінок, стилі CSS і сценарії JavaScript. Окремий сервер і база даних у поточній версії не використовуються. Основні функціональні частини системи:</p>
+<ul class="muted"><li><b>Модуль навігації</b> — перемикання між головною панеллю, конструктором, порівнянням, калькулятором і довідником.</li><li><b>Модуль побудови схеми</b> — створення масивів вузлів і з’єднань відповідно до вибраної топології.</li><li><b>Модуль порівняння</b> — подання узагальнених переваг, недоліків, складності та стійкості структур.</li><li><b>Модуль калькулятора</b> — обчислення орієнтовних витрат за введеними користувачем цінами.</li><li><b>Довідковий модуль</b> — пояснення принципів побудови п’яти топологій.</li></ul>
+<h3>3.2. Вхідні та вихідні дані</h3>
+<table class="table"><thead><tr><th>Тип</th><th>Параметр</th><th>Призначення</th></tr></thead><tbody>
+<tr><td>Вхідні</td><td>Тип топології</td><td>Визначає алгоритм розташування вузлів і з’єднань.</td></tr>
+<tr><td>Вхідні</td><td>Кількість ПК</td><td>Задає кількість кінцевих пристроїв у схемі.</td></tr>
+<tr><td>Вхідні</td><td>Швидкість каналу</td><td>Відображається у зведених параметрах проєкту.</td></tr>
+<tr><td>Вхідні</td><td>Ціни та довжина кабелю</td><td>Використовуються калькулятором вартості.</td></tr>
+<tr><td>Вихідні</td><td>Графічна схема</td><td>Відображає вузли та канали зв’язку.</td></tr>
+<tr><td>Вихідні</td><td>Опис і характеристики</td><td>Пояснюють особливості обраної структури.</td></tr>
+<tr><td>Вихідні</td><td>Сума витрат</td><td>Показує орієнтовну вартість обладнання та матеріалів.</td></tr>
+</tbody></table>
+<h3>3.3. Основні програмні функції</h3>
+<p>Функція <b>showPage(id)</b> перемикає активний розділ інтерфейсу. Функція <b>renderNetwork()</b> зчитує параметри конструктора, перевіряє кількість комп’ютерів, формує масиви вузлів і з’єднань та генерує SVG-елементи. Функція <b>calculate()</b> зчитує параметри кошторису, виконує арифметичні обчислення та виводить проміжні й загальний результати. Функція <b>resetBuilder()</b> повертає параметри конструктора до початкових значень.</p>
+<p>Повний лістинг програми для пояснювальної записки потрібно перенести з остаточного файлу <b>index.html</b>. У методичці рекомендовано оформлювати програмний код окремо від основного тексту, наприклад шрифтом Courier New висотою 10 пунктів. Наведений опис функцій не замінює повного лістингу.</p>
+</div>
+
+<div class="card span-12" id="course-results" style="margin-bottom:16px">
+<h2>4. Результати роботи програми</h2>
+<h3>4.1. Порядок роботи користувача</h3>
+<ol class="muted"><li>Відкрити файл index.html у сучасному веббраузері.</li><li>На головній панелі ознайомитися з доступними модулями системи.</li><li>Перейти до конструктора мережі та вибрати потрібну топологію.</li><li>Вказати кількість комп’ютерів і швидкість каналу, після чого побудувати схему.</li><li>Перейти до порівняння топологій і переглянути узагальнені характеристики.</li><li>У калькуляторі ввести кількість робочих місць, ціни обладнання та параметри кабелю.</li><li>Переглянути підсумкову суму й за потреби надрукувати розрахунок.</li></ol>
+<h3>4.2. Перевірка функцій</h3>
+<p>Для підтвердження правильності роботи системи необхідно перевірити різні значення параметрів, зокрема граничні значення кількості комп’ютерів, усі доступні типи топологій і різні конфігурації калькулятора. Нижче наведено перелік тестових сценаріїв, які слід виконати під час фактичного тестування.</p>
+<table class="table"><thead><tr><th>№</th><th>Перевірка</th><th>Тестові дані</th><th>Очікуваний результат</th></tr></thead><tbody>
+<tr><td>1</td><td>Побудова зірки</td><td>Зірка, 5 ПК</td><td>Центральний комутатор і п’ять кінцевих вузлів.</td></tr>
+<tr><td>2</td><td>Побудова шини</td><td>Шина, 8 ПК</td><td>Спільна магістраль і вісім підключених вузлів.</td></tr>
+<tr><td>3</td><td>Побудова кільця</td><td>Кільце, 4 ПК</td><td>Чотири вузли утворюють замкнений контур.</td></tr>
+<tr><td>4</td><td>Мінімальна кількість ПК</td><td>2 ПК</td><td>Схема формується щонайменше для двох комп’ютерів.</td></tr>
+<tr><td>5</td><td>Максимальна кількість ПК</td><td>12 ПК</td><td>Схема формується для дванадцяти комп’ютерів.</td></tr>
+<tr><td>6</td><td>Перевірка обмеження</td><td>Введення 20 ПК</td><td>Значення обмежується допустимою верхньою межею 12.</td></tr>
+<tr><td>7</td><td>Розрахунок кошторису</td><td>10 ПК, 16 портів</td><td>Виводяться окремі витрати та підсумок із резервом 10%.</td></tr>
+</tbody></table>
+<h3>4.3. Фіксація результатів тестування</h3>
+<p>Після виконання кожного сценарію потрібно зафіксувати фактичний результат: чи сформувалася схема, чи відповідає кількість вузлів заданим параметрам, чи правильно відображено тип топології та чи збігається сума калькулятора з контрольним ручним обчисленням. У пояснювальну записку слід додати скриншоти головної панелі, конструктора для кількох топологій, таблиці порівняння та калькулятора.</p>
+<div class="info-box">Таблиця містить тестові сценарії та очікувані результати, а не підтвердження вже проведених тестів. Позначки «пройдено/не пройдено» та фактичні результати потрібно внести після перевірки програми у браузері.</div>
+</div>
+
+<div class="card span-12" id="course-conclusion" style="margin-bottom:16px">
+<h2>Висновки</h2>
+<p>У межах курсового проєкту розробляється інформаційна система NetTopology для навчального дослідження топологій локальних комп’ютерних мереж. Система об’єднує засоби візуалізації основних мережевих структур, порівняння їхніх характеристик, довідкові матеріали та калькулятор орієнтовної вартості.</p>
+<p>Під час проєктування розглянуто особливості топологій «зірка», «шина», «кільце», «дерево» та «комірчаста», визначено основні вхідні й вихідні дані, обґрунтовано використання HTML, CSS, JavaScript і SVG. Розроблено загальну послідовність роботи програми та формули для попередньої оцінки витрат на комутатор, кабель і конектори.</p>
+<p>Практична цінність системи полягає у можливості наочно пояснювати принципи побудови локальних мереж, порівнювати їхні структури та виконувати попередні навчальні розрахунки. NetTopology може використовуватися під час вивчення комп’ютерних мереж, підготовки навчальних прикладів і початкового планування невеликих LAN.</p>
+<p>Поточна версія має обмеження: розрахунки є наближеними, не враховують усіх витрат на монтаж та експлуатацію, а схеми мають демонстраційний характер. Подальше вдосконалення може передбачати ручне переміщення вузлів, додавання та видалення пристроїв, створення довільних з’єднань, збереження й завантаження конфігурацій, експорт схем і розширення параметрів мережевого обладнання.</p>
+</div>
+
+<div class="card span-12" id="course-sources">
+<h2>Список використаних джерел</h2>
+<ol class="muted">
+<li>Ландик О. Г. Програмування : методичні рекомендації для оформлення курсового проєкту з дисципліни «Програмування». Ніжин : ПП Лисенко, 2022. 16 с.</li>
+<li>Tanenbaum A. S., Wetherall D. J. Computer Networks. 5th ed. Pearson, 2011.</li>
+<li>Kurose J. F., Ross K. W. Computer Networking: A Top-Down Approach. 8th ed. Pearson, 2021.</li>
+<li>MDN Web Docs. HTML: HyperText Markup Language. URL: https://developer.mozilla.org/en-US/docs/Web/HTML</li>
+<li>MDN Web Docs. CSS: Cascading Style Sheets. URL: https://developer.mozilla.org/en-US/docs/Web/CSS</li>
+<li>MDN Web Docs. JavaScript. URL: https://developer.mozilla.org/en-US/docs/Web/JavaScript</li>
+<li>MDN Web Docs. SVG: Scalable Vector Graphics. URL: https://developer.mozilla.org/en-US/docs/Web/SVG</li>
+<li>IEEE 802.3 Ethernet Working Group. URL: https://www.ieee802.org/3/</li>
+</ol>
+<p class="muted" style="font-size:12px">Перед здачею перевірити бібліографічний опис джерел за вимогами закладу та додати всі ресурси, які фактично використовувалися під час розробки.</p>
+</div>
+</section>
+
+<div class="footer">NetTopology · Навчальний програмний продукт · Версія 1.0</div>
+</main></div>
+<script>
+const names={star:"Зірка",bus:"Шина",ring:"Кільце",tree:"Дерево",mesh:"Комірчаста"};
+const descriptions={star:"Усі комп’ютери підключені до центрального комутатора. Відмова окремого кабелю зазвичай не вимикає інші вузли.",bus:"Усі комп’ютери підключені до спільної магістральної лінії. Пошкодження магістралі може зупинити роботу сегмента.",ring:"Комп’ютери утворюють замкнений ланцюг. Кожен вузол має зв’язок із двома сусідніми.",tree:"Мережа має ієрархічну структуру з головним вузлом і дочірніми сегментами.",mesh:"Між вузлами передбачено декілька зв’язків, що створює альтернативні шляхи передавання даних."};
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function resetBuilder(){document.getElementById('topology').value='star';document.getElementById('pcs').value=5;document.getElementById('speed').value='1000';renderNetwork();}
+function renderNetwork(){
+ const type=document.getElementById('topology').value;let n=Math.max(2,Math.min(12,parseInt(document.getElementById('pcs').value)||5));document.getElementById('pcs').value=n;
+ const svg=document.getElementById('networkSvg');let nodes=[],edges=[];const cx=400,cy=190,rx=300,ry=135;
+ if(type==='star'){nodes.push({x:cx,y:cy,label:'Комутатор',kind:'switch'});for(let i=0;i<n;i++){let a=-Math.PI/2+2*Math.PI*i/n;nodes.push({x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a),label:'ПК '+(i+1)});edges.push([0,i+1]);}}
+ if(type==='bus'){nodes.push({x:400,y:190,label:'Магістраль',kind:'switch'});for(let i=0;i<n;i++){let x=80+i*640/(n-1);nodes.push({x,y:190,label:'ПК '+(i+1)});edges.push([0,i+1]);}}
+ if(type==='ring'){for(let i=0;i<n;i++){let a=-Math.PI/2+2*Math.PI*i/n;nodes.push({x:cx+rx*.78*Math.cos(a),y:cy+ry*.85*Math.sin(a),label:'ПК '+(i+1)});edges.push([i,(i+1)%n]);}}
+ if(type==='tree'){nodes.push({x:400,y:65,label:'Головний комутатор',kind:'switch'});let mid=Math.ceil(n/2);nodes.push({x:245,y:175,label:'Комутатор 1',kind:'switch'},{x:555,y:175,label:'Комутатор 2',kind:'switch'});edges.push([0,1],[0,2]);for(let i=0;i<n;i++){let side=i<mid?0:1,idx=side===0?1:2,count=side===0?mid:n-mid,pos=side===0?i:i-mid;let x=(side===0?100:420)+(pos+1)*220/(count+1);nodes.push({x,y:300,label:'ПК '+(i+1)});edges.push([idx,nodes.length-1]);}}
+ if(type==='mesh'){for(let i=0;i<n;i++){let a=-Math.PI/2+2*Math.PI*i/n;nodes.push({x:cx+rx*.78*Math.cos(a),y:cy+ry*.8*Math.sin(a),label:'ПК '+(i+1)});}for(let i=0;i<n;i++){edges.push([i,(i+1)%n]);if(n>3)edges.push([i,(i+2)%n]);}}
+ let out='';edges.forEach(([a,b])=>{let A=nodes[a],B=nodes[b];out+=`<line class="edge" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/>`;});
+ nodes.forEach((p,i)=>{let w=p.kind?116:72,h=38;out+=`<g class="node"><rect x="${p.x-w/2}" y="${p.y-h/2}" width="${w}" height="${h}"/><text x="${p.x}" y="${p.y+4}">${p.label}</text></g>`;});
+ svg.innerHTML=out;document.getElementById('schemeTag').textContent='Топологія: '+names[type];document.getElementById('schemeDescription').textContent=descriptions[type];document.getElementById('nodeCount').textContent='Вузлів: '+nodes.length;document.getElementById('deviceMetric').textContent=nodes.length;document.getElementById('summaryType').innerHTML='<b>'+names[type]+'</b>';document.getElementById('summaryPcs').innerHTML='<b>'+n+'</b>';document.getElementById('summarySpeed').innerHTML='<b>'+document.getElementById('speed').value+' Мбіт/с</b>';
+}
+function money(v){return new Intl.NumberFormat('uk-UA',{maximumFractionDigits:0}).format(Math.round(v))+' грн';}
+function calculate(){let n=Math.max(2,Math.min(100,Number(document.getElementById('calcPcs').value)||2)),ports=Number(document.getElementById('ports').value),sw=Number(document.getElementById('switchPrice').value)||0,cp=Number(document.getElementById('cablePrice').value)||0,len=Number(document.getElementById('cableLength').value)||0,con=Number(document.getElementById('connectorPrice').value)||0;let switches=Math.ceil(n/ports),s=switches*sw,c=n*len*cp,k=n*2*con,base=s+c+k,r=base*.1;document.getElementById('switchCost').textContent=money(s);document.getElementById('cableCost').textContent=money(c);document.getElementById('connectorCost').textContent=money(k);document.getElementById('reserveCost').textContent=money(r);document.getElementById('totalCost').textContent=money(base+r);}
+renderNetwork();calculate();
+</script>
+</body></html>
